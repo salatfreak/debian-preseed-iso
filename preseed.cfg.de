@@ -1,0 +1,56 @@
+# Location and language
+d-i debian-installer/language string de
+d-i debian-installer/country string DE
+d-i debian-installer/locale string de_DE.UTF-8
+d-i keyboard-configuration/xkb-keymap select de
+
+# Hostname and domain name
+d-i netcfg/get_hostname string debian
+d-i netcfg/get_domain string
+
+# Disable root login
+d-i passwd/root-login boolean false
+
+# User account
+d-i passwd/user-fullname string User
+d-i passwd/username string user
+d-i passwd/user-password-crypted password ...
+
+# Partitioning
+d-i partman-auto/method string regular
+d-i partman-auto/choose_recipe select atomic
+d-i partman/choose_partition select finish
+d-i partman/confirm_nooverwrite boolean true
+
+# Disable additional CDs
+d-i apt-setup/cdrom/set-first boolean false
+d-i apt-setup/cdrom/set-next boolean false
+d-i apt-setup/cdrom/set-failed boolean false
+
+# Mirror selection
+d-i mirror/country string DE
+d-i mirror/http/mirror select deb.debian.org
+
+# HTTP proxy
+d-i mirror/http/proxy string
+
+# Disable popularity contest participation
+popularity-contest popularity-contest/participate boolean false
+
+# Install standard tasks and SSH server
+tasksel tasksel/first multiselect ssh-server, standard
+
+# Grub
+d-i grub-installer/only_debian boolean true
+d-i grub-installer/bootdev string default
+
+# Skip finish message and avoid rebooting
+d-i finish-install/reboot_in_progress note
+d-i debian-installer/exit/poweroff boolean true
+
+# Install additional software
+#d-i pkgsel/include string pkg-1 pkg-2
+
+# Run custom commands
+d-i preseed/late_command string \
+  cp /cdrom/setup.sh /cdrom/data.tar.gz /target/tmp/; in-target /tmp/setup.sh
